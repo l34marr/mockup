@@ -39,6 +39,9 @@ New:
 
   [thet]
 
+- Add srcset attribute to image modal
+  [didrix]
+
 Fixes:
 
 - Fix issue where using filter when paging would not work in the structure pattern
