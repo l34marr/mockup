@@ -6,7 +6,8 @@
  *    basePath(string): Start browse/search in this path. Default: set to rootPath.
  *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
- *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'browse'.
+ *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
+ *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
  *    maximumSelectionSize(integer): The maximum number of items that can be selected in a multi-select control. If this number is less than 1 selection is not limited. (-1)
  *    minimumInputLength: Select2 option. Number of characters necessary to start a search. Default: 0.
  *    orderable(boolean): Whether or not items should be drag-and-drop sortable. (true)
@@ -81,7 +82,8 @@ define([
   'pat-base',
   'mockup-patterns-select2',
   'mockup-utils',
-  'translate'
+  'translate',
+  'bootstrap-dropdown'
 ], function($, _, Base, Select2, utils, _t) {
   'use strict';
 
@@ -100,9 +102,10 @@ define([
       basePath: undefined,
       closeOnSelect: false,
       dropdownCssClass: 'pattern-relateditems-dropdown',
+      favorites: [],
       maximumSelectionSize: -1,
       minimumInputLength: 0,
-      mode: 'browse', // possible values are search and browse
+      mode: 'search', // possible values are search and browse
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -115,14 +118,30 @@ define([
         '/<a href="<%- path %>" class="crumb"><%- text %></a>',
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
-        '<span>' +
-        '  <button class="mode browse <% if (mode=="browse") { %>active<% } %>"><%- browseModeText %></button>' +
+        '<div>' +
         '  <button class="mode search <% if (mode=="search") { %>active<% } %>"><%- searchModeText %></button>' +
+        '  <button class="mode browse <% if (mode=="browse") { %>active<% } %>"><%- browseModeText %></button>' +
         '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
         '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
         '  <%= items %>' +
-        '</span>',
+        '  <% if (favorites.length > 0) { %>' +
+        '  <div class="favorites dropdown pull-right">' +
+        '    <button class="favorites dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '      <span class="glyphicon glyphicon-star"/>' +
+        '      <%- favText %>' +
+        '      <span class="caret"/>' +
+        '    </button>' +
+        '    <ul class="dropdown-menu">' +
+        '      <%= favItems %>' +
+        '    </ul>' +
+        '  </div>' +
+        '  <% } %>' +
+
+        '</div>',
       breadCrumbsTemplateSelector: null,
+      favoriteTemplate: '' +
+        '<li><a href="<%- path %>" class="fav" aria-labelledby="blip"><%- title %></a></li>',
+      favoriteTemplateSelector: null,
       resultTemplate: '' +
         '<div class="pattern-relateditems-result <% if (selected) { %>pattern-relateditems-active<% } %>">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
@@ -230,8 +249,17 @@ define([
           itemsHtml = itemsHtml + self.applyTemplate('breadCrumb', item);
         }
       });
+
+      // favorites
+      var favoritesHtml = '';
+      _.each(self.options.favorites, function (item) {
+        favoritesHtml = favoritesHtml + self.applyTemplate('favorite', item);
+      });
+
       html = self.applyTemplate('breadCrumbs', {
         items: itemsHtml,
+        favItems: favoritesHtml,
+        favText: _t('Favorites'),
         searchText: _t('Search in path:'),
         searchModeText: _t('Search'),
         browseModeText: _t('Browse'),
@@ -239,6 +267,8 @@ define([
       });
 
       var $crumbs = $(html);
+
+			$('.dropdown-toggle', $crumbs).dropdown();
 
       $('button.mode.search', $crumbs).on('click', function(e) {
         e.preventDefault();
@@ -257,6 +287,11 @@ define([
       });
 
       $('a.crumb', $crumbs).on('click', function(e) {
+        e.preventDefault();
+        self.browseTo($(this).attr('href'));
+      });
+
+      $('a.fav', $crumbs).on('click', function(e) {
         e.preventDefault();
         self.browseTo($(this).attr('href'));
       });
@@ -410,7 +445,7 @@ define([
 
       Select2.prototype.initializeSelect2.call(self);
 
-      self.$browsePath = $('<span class="pattern-relateditems-path" />');
+      self.$browsePath = $('<div class="pattern-relateditems-path" />');
       self.$container.prepend(self.$browsePath);
 
       self.$el.on('select2-selecting', function(event) {
