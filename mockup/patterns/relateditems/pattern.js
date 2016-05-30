@@ -4,7 +4,7 @@
  *    vocabularyUrl(string): This is a URL to a JSON-formatted file used to populate the list (null)
  *    attributes(array): This list is passed to the server during an AJAX request to specify the attributes which should be included on each item. (['UID', 'Title', 'portal_type', 'path'])
  *    basePath(string): Start browse/search in this path. Default: set to rootPath.
- *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (false)
+ *    closeOnSelect(boolean): Select2 option. Whether or not the drop down should be closed when an item is selected. (true)
  *    dropdownCssClass(string): Select2 option. CSS class to add to the drop down element. ('pattern-relateditems-dropdown')
  *    favorites(array): Array of objects. These are favorites, which can be used to quickly jump to different locations. Objects have the attributes "title" and "path". Default: []
  *    mode(string): Initial widget mode. Possible values: 'search', 'browse'. If set to 'search', the catalog is searched for a searchterm. If set to 'browse', browsing starts at basePath. Default: 'search'.
@@ -93,6 +93,7 @@ define([
     parser: 'mockup',
     currentPath: undefined,
     browsing: undefined,
+    openAfterInit: undefined,
     defaults: {
       // main option
       vocabularyUrl: null,  // must be set to work
@@ -100,7 +101,7 @@ define([
       // more options
       attributes: ['UID', 'Title', 'portal_type', 'path', 'getURL', 'getIcon', 'is_folderish', 'review_state'],  // used by utils.QueryHelper
       basePath: undefined,
-      closeOnSelect: false,
+      closeOnSelect: true,
       dropdownCssClass: 'pattern-relateditems-dropdown',
       favorites: [],
       maximumSelectionSize: -1,
@@ -119,14 +120,18 @@ define([
       breadCrumbTemplateSelector: null,
       breadCrumbsTemplate: '' +
         '<div>' +
-        '  <button class="mode search <% if (mode=="search") { %>active<% } %>"><%- searchModeText %></button>' +
-        '  <button class="mode browse <% if (mode=="browse") { %>active<% } %>"><%- browseModeText %></button>' +
-        '  <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
-        '  <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
-        '  <%= items %>' +
+        '  <div class="btn-group" role="group">' +
+        '    <button type="button" class="mode search btn btn-xs <% if (mode=="search") { %>btn-primary<% } else {%>btn-default<% } %>"><%- searchModeText %></button>' +
+        '    <button type="button" class="mode browse btn btn-xs <% if (mode=="browse") { %>btn-primary<% } else {%>btn-default<% } %>"><%- browseModeText %></button>' +
+        '  </div>' +
+        '  <div class="pattern-relateditems-path-wrapper">' +
+        '    <span class="pattern-relateditems-path-label"><%- searchText %></span>' +
+        '    <a class="crumb" href="<%- rootPath %>"><span class="glyphicon glyphicon-home"/></a>' +
+        '    <%= items %>' +
+        '  </div>' +
         '  <% if (favorites.length > 0) { %>' +
         '  <div class="favorites dropdown pull-right">' +
-        '    <button class="favorites dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+        '    <button class="favorites dropdown-toggle btn btn-primary btn-xs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
         '      <span class="glyphicon glyphicon-star"/>' +
         '      <%- favText %>' +
         '      <span class="caret"/>' +
@@ -143,7 +148,7 @@ define([
         '<li><a href="<%- path %>" class="fav" aria-labelledby="blip"><%- title %></a></li>',
       favoriteTemplateSelector: null,
       resultTemplate: '' +
-        '<div class="pattern-relateditems-result <% if (selected) { %>pattern-relateditems-active<% } %>">' +
+        '<div class="pattern-relateditems-result">' +
         '  <a href="#" class=" pattern-relateditems-result-select <% if (selectable) { %>selectable<% } %>">' +
         '    <% if (typeof getIcon !== "undefined" && getIcon) { %><img src="<%- getURL %>/@@images/image/icon "> <% } %>' +
         '    <span class="pattern-relateditems-result-title <% if (typeof review_state !== "undefined") { %> state-<%- review_state %> <% } %>  " /span>' +
@@ -272,18 +277,34 @@ define([
 
       $('button.mode.search', $crumbs).on('click', function(e) {
         e.preventDefault();
-        $('button.mode.search', $crumbs).addClass('active');
-        $('button.mode.browse', $crumbs).removeClass('active');
+        $('button.mode.search', $crumbs).toggleClass('btn-primary btn-default');
+        $('button.mode.browse', $crumbs).toggleClass('btn-primary btn-default');
         self.browsing = false;
+        if (self.$el.select2('data').length > 0) {
+          // Have to call after initialization
+          self.openAfterInit = true;
+        }
         self.setQuery();
+        if (!self.openAfterInit) {
+          self.$el.select2('close');
+          self.$el.select2('open');
+        }
       });
 
       $('button.mode.browse', $crumbs).on('click', function(e) {
         e.preventDefault();
-        $('button.mode.browse', $crumbs).addClass('active');
-        $('button.mode.search', $crumbs).removeClass('active');
+        $('button.mode.search', $crumbs).toggleClass('btn-primary btn-default');
+        $('button.mode.browse', $crumbs).toggleClass('btn-primary btn-default');
         self.browsing = true;
+        if (self.$el.select2('data').length > 0) {
+          // Have to call after initialization
+          self.openAfterInit = true;
+        }
         self.setQuery();
+        if (!self.openAfterInit) {
+          self.$el.select2('close');
+          self.$el.select2('open');
+        }
       });
 
       $('a.crumb', $crumbs).on('click', function(e) {
@@ -315,7 +336,6 @@ define([
       var data = self.$el.select2('data');
       data.push(item);
       self.$el.select2('data', data, true);
-      item.selected = true;
       self.emit('selected');
     },
 
@@ -329,7 +349,6 @@ define([
         }
       });
       self.$el.select2('data', data, true);
-      item.selected = false;
       self.emit('deselected');
     },
 
@@ -365,14 +384,13 @@ define([
 
       self.options.formatResult = function(item) {
         item.selectable = self.isSelectable(item);
-        if (item.selected === undefined) {
-          var data = self.$el.select2('data');
-          item.selected = false;
-          _.each(data, function(obj) {
-            if (obj.UID === item.UID) {
-              item.selected = true;
-            }
-          });
+        var data = self.$el.select2('data');
+
+        for (var i = 0; i < data.length; i = i + 1) {
+          if (data[i].UID === item.UID) {
+            // Exclude already selected items in result list.
+            return;
+          }
         }
 
         var result = $(self.applyTemplate('result', item));
@@ -388,10 +406,13 @@ define([
               self.selectItem(item);
               $parent.addClass('pattern-relateditems-active');
               if (self.options.maximumSelectionSize > 0) {
-                var items = self.$select2.select2('data');
+                var items = self.$el.select2('data');
                 if (items.length >= self.options.maximumSelectionSize) {
-                  self.$select2.select2('close');
+                  self.$el.select2('close');
                 }
+              }
+              if (self.options.closeOnSelect) {
+                self.$el.select2('close');
               }
             }
           }
@@ -433,10 +454,18 @@ define([
                   return item !== undefined;
                 })
               );
+
+              if (self.openAfterInit) {
+                // open after initialization
+                self.$el.select2('open');
+                self.openAfterInit = undefined;
+              }
+
             },
             false
           );
         }
+
       };
 
       self.options.id = function(item) {

@@ -39,6 +39,9 @@ New:
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  - [x] Default ``closeOnSelect`` to ``true``.
+  - [x] Exclude already selected items in result list.
+  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
   [thet]
 
 
