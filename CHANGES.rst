@@ -29,6 +29,7 @@ New:
   - Show only selectable and folderish items in browse mode, if selctable items are defined.
   - Optional Image Upload
   - Favorites based on registry path entries
+
 - Related items pattern refactoring:
   - [x] Make "search" and "browse" mode user-selectable via buttons.
   - [x] Remove obsolete tree widget, use "browse" mode instead.
@@ -41,6 +42,7 @@ New:
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
@@ -84,6 +86,11 @@ New:
   [thet]
 
 Fixes:
+
+- Prevent popovers to be closed when clicking on non-visible elements which still use screen space (those with ``visibility: hidden`` or ``opacity: 0``).
+  That in addition to elements, which are not visible at all and do not use screen space (``display: none``).
+  Prevents upload form in structure pattern to be closed when opening the file selection tool.
+  [thet]
 
 - Escape input into select2 widget
   [vangheem]
