@@ -13,6 +13,10 @@ New:
 
 - Fix urls in modals not opening in new window
   [vangheem]
+- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
+  jQuery starts to search at it's first child element.
+  [thet]
+
 - Add option ``allowPathSelection`` to the upload widget to explicitly disable the pat-relateditems path selection.
   [thet]
 
