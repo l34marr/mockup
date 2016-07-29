@@ -1,60 +1,118 @@
 @import '@{bowerPath}/bootstrap/less/variables.less'; // Modify this for custom colors, font-sizes, etc
 @icon-font-path: '@{bowerPath}/bootstrap/dist/fonts/';
 @import '@{bowerPath}/bootstrap/less/glyphicons.less';
+@import '@{mockuplessPath}/ui.less';
+
+@import (reference) '@{bowerPath}/bootstrap/less/mixins.less';
+@import (reference) '@{bowerPath}/bootstrap/less/utilities.less';
+@import (reference) '@{bowerPath}/bootstrap/less/buttons.less';
+@import (reference) '@{bowerPath}/bootstrap/less/button-groups.less';
+@import (reference) '@{bowerPath}/bootstrap/less/popovers.less';
+@import (reference) '@{bowerPath}/bootstrap/less/tooltip.less';
+@import (reference) '@{mockuplessPath}/popover.less';
+
 @import '@{mockupPath}/select2/pattern.select2.less';
-@import '@{bowerPath}/bootstrap/less/buttons.less';
-@import '@{bowerPath}/bootstrap/less/button-groups.less';
+
+
+.pattern-relateditems-container {
+
+    .fade:extend(.fade all){}
+    .collapse:extend(.collapse all){}
+    .collapsing:extend(.collapsing all){}
+
+    .popover:extend(.popover all){}
+    .popover-title:extend(.popover-title all){}
+    .popover-content:extend(.popover-content all){}
+    .arrow:extend(.arrow all){}
+    .tooltip:extend(.tooltip all){}
+    .tooltip-arrow:extend(.tooltip-arrow all){}
+    .tooltip-inner:extend(.tooltip-inner all){}
+
+    .table:extend(.table all){}
+    .pagination:extend(.pagination all){}
+
+    .btn:extend(.btn all){}
+    .btn-default:extend(.btn-default all){}
+    .btn-danger:extend(.btn-danger all){}
+    .btn-primary:extend(.btn-primary all){}
+    .btn-group:extend(.btn-group all){}
+    .btn-success:extend(.btn-success all){}
+    .input-group:extend(.input-group all){}
+    .input-group-addon:extend(.input-group-addon all){}
+    .input-group-btn:extend(.input-group-btn all){}
+    .dropdown-menu:extend(.dropdown-menu all){}
+    .dropdown-toggle:extend(.dropdown-toggle all){}
+    .dropdown-header:extend(.dropdown-header all){}
+    .divider:extend(.divider all){}
+
+    .table-striped:extend(.table-striped all){}
+    .table-bordered:extend(.table-bordered all){}
+
+    .navbar:extend(.navbar all){}
+    .navbar-search:extend(.navbar-search all){}
+    .form-search:extend(.form-search all){}
+    .ui-offset-parent:extend(.ui-offset-parent all){}
+
+    .form-group:extend(.form-group all){}
+    .help-block:extend(.help-block all){}
+    .checkbox:extend(.checkbox all){}
+
+    .open:extend(.open all){}
+
+    position: relative;
+    display: inline-block;
+
+    .btn-group .btn {
+        vertical-align: top;
+    }
+}
 
 .pattern-relateditems-dropdown {
-  .select2-results {
-    .select2-highlighted {
-      color: #000;
-      background: #d8d8d8;
-    }
+    .select2-results {
+        .select2-highlighted {
+            color: #000;
+            background: #d8d8d8;
+        }
 
-    .select2-selected {
-      display: list-item;
+        .select2-selected {
+            display: list-item;
+        }
     }
-  }
 }
 
 .pattern-relateditems-active {
-  padding: 5px;
-  background-color: #ddd;
-}
-
-.pattern-relateditems-container {
-  position: relative;
-  display: inline-block;
+    padding: 5px;
+    background-color: #ddd;
 }
 
 .pattern-relateditems-path-wrapper {
+    max-width: 55%;
     margin-top: 2px;
     margin-bottom: 2px;
     display: inline-block;
 }
 .pattern-relateditems-path {
-  font-size: 12px;
-  line-height: 20px;
-  position: relative;
-  display: block;
-  padding: 0 6px;
-  color: #333;
-  border: 1px solid #aaa;
-  border-bottom-style: none;
-  background-color: #f1f1f1;
-
-  a {
+    font-size: 12px;
+    line-height: 20px;
+    position: relative;
+    display: block;
     padding: 0 6px;
-  }
+    color: #333;
+    border: 1px solid #aaa;
+    border-bottom-style: none;
+    background-color: #f1f1f1;
 
-  em {
-    color: #666;
-  }
-  .btn-group {
-    margin-top: 2px;
-    margin-bottom: 2px;
-  }
+    a {
+        padding: 0 6px;
+    }
+
+    em {
+        color: #666;
+    }
+    .btn-group {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
 }
 
 .pattern-relateditems-path-label {
@@ -62,51 +120,50 @@
 }
 
 .pattern-relateditems-buttons {
-  font-size: 18px;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  display: inline-block;
-  margin-top: -16px;
-  text-align: right;
+    font-size: 18px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    display: inline-block;
+    margin-top: -16px;
+    text-align: right;
 
-  a {
-    .glyphicon();
-    .glyphicon-chevron-right();
-
-    line-height: 36px;
-    display: block;
-    height: 36px;
-  }
+    a {
+        .glyphicon();
+        .glyphicon-chevron-right();
+        line-height: 36px;
+        display: block;
+        height: 36px;
+    }
 }
 
 .pattern-relateditems-result {
-  position: relative;
-  padding-right: 30px;
+    position: relative;
+    padding-right: 30px;
 
-  a {
-    &:hover {
-      text-decoration: none;
+    a {
+        &:hover {
+            text-decoration: none;
+        }
     }
-  }
 
-  .pattern-relateditems-result-select {
-    line-height: 15px;
-    display: block;
-    padding-top: 5px;
-  }
+    .pattern-relateditems-result-select {
+        line-height: 15px;
+        display: block;
+        padding-top: 5px;
+    }
 
-  .pattern-relateditems-result-path {
-    font-size: 11px;
-    display: block;
-    color: #444;
-  }
+    .pattern-relateditems-result-path {
+        font-size: 11px;
+        display: block;
+        color: #444;
+    }
 }
 
 .pattern-relateditems-item {
-  .pattern-relateditems-item-path {
-    font-size: 11px;
-    display: block;
-    color: #444;
-  }
+    .pattern-relateditems-item-path {
+        font-size: 11px;
+        display: block;
+        color: #444;
+    }
 }
