@@ -104,7 +104,6 @@ define([
     trigger: '.pat-relateditems',
     parser: 'mockup',
     currentPath: undefined,
-    browsing: undefined,
     openAfterInit: undefined,
     defaults: {
       // main option
@@ -120,6 +119,7 @@ define([
       maximumSelectionSize: -1,
       minimumInputLength: 0,
       mode: 'search', // possible values are search and browse
+      browsing: undefined,
       orderable: true,  // mockup-patterns-select2
       rootPath: '/',
       selectableTypes: null, // null means everything is selectable, otherwise a list of strings to match types that are selectable
@@ -168,7 +168,7 @@ define([
         '    <span class="pattern-relateditems-result-path"><%- path %></span>' +
         '  </a>' +
         '  <span class="pattern-relateditems-buttons">' +
-        '  <% if (is_folderish) { %>' +
+        '  <% if (mode !== "search" && is_folderish) { %>' +
         '     <a class="pattern-relateditems-result-browse" href="#" data-path="<%- path %>"></a>' +
         '   <% } %>' +
         ' </span>' +
@@ -208,7 +208,7 @@ define([
 
       var baseCriteria = [];
 
-      if (!this.browsing) {
+      if (this.options.mode == 'search') {
         // MODE SEARCH
 
         // restrict to given types
@@ -220,7 +220,6 @@ define([
           });
         }
 
-        // search recursively in current path
         baseCriteria.push({
           i: 'path',
           o: 'plone.app.querystring.operation.string.path',
@@ -289,18 +288,22 @@ define([
 
       $('button.mode.search', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        if ($('button.mode.search', self.$toolbar).hasClass('btn-primary')) {
-          return;
-        }
-        $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
-        $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-        self.browsing = false;
-        if (self.$el.select2('data').length > 0) {
-          // Have to call after initialization
-          self.openAfterInit = true;
-        }
-        self.setQuery();
-        if (!self.openAfterInit) {
+        if (self.browsing) {
+          $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
+          $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
+          self.options.mode = 'search';
+          self.browsing = false;
+          if (self.$el.select2('data').length > 0) {
+            // Have to call after initialization
+            self.openAfterInit = true;
+          }
+          self.setQuery();
+          if (!self.openAfterInit) {
+            self.$el.select2('close');
+            self.$el.select2('open');
+          }
+        } else {
+          // just open result list
           self.$el.select2('close');
           self.$el.select2('open');
         }
@@ -308,18 +311,22 @@ define([
 
       $('button.mode.browse', self.$toolbar).on('click', function(e) {
         e.preventDefault();
-        if ($('button.mode.browse', self.$toolbar).hasClass('btn-primary')) {
-          return;
-        }
-        $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
-        $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
-        self.browsing = true;
-        if (self.$el.select2('data').length > 0) {
-          // Have to call after initialization
-          self.openAfterInit = true;
-        }
-        self.setQuery();
-        if (!self.openAfterInit) {
+        if (!self.browsing) {
+          $('button.mode.search', self.$toolbar).toggleClass('btn-primary btn-default');
+          $('button.mode.browse', self.$toolbar).toggleClass('btn-primary btn-default');
+          self.options.mode = 'browse';
+          self.browsing = true;
+          if (self.$el.select2('data').length > 0) {
+            // Have to call after initialization
+            self.openAfterInit = true;
+          }
+          self.setQuery();
+          if (!self.openAfterInit) {
+            self.$el.select2('close');
+            self.$el.select2('open');
+          }
+        } else {
+          // just open result list
           self.$el.select2('close');
           self.$el.select2('open');
         }
