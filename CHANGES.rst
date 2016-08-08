@@ -10,65 +10,29 @@ Incompatibilities:
   [thet]
 
 - Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+  [thet]
+
+- The related items and structure patterns have changed quite a lot.
+  Customizations might break due to these changes.
+  See below.
+
 
 New:
 
-- Fix urls in modals not opening in new window
-  [vangheem]
-- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
-  jQuery starts to search at it's first child element.
-  [thet]
-
-- Add option ``allowPathSelection`` to the upload widget to explicitly disable the pat-relateditems path selection.
-  [thet]
-
-- Update safe bower.json dependencies except backbone which tests would fail.
-  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
-  [thet]
-- Related items pattern:
-  OK - Remove obsolete tree widget
-  OK - Make Search/Browse mode user-selectable via buttons
-  OK - Let search search recursively
-  OK - Let search mode use last browse mode's path
-  OK - Show only selectable items in search mode, if defined.
-  OK - Search only in current path in browse mode.
-  - Show only selectable and folderish items in browse mode, if selctable items are defined.
-  - Optional Image Upload
-  - Favorites based on registry path entries
-
 - Related items pattern refactoring:
-  - [x] Make "search" and "browse" mode user-selectable via buttons.
-  - [x] Remove obsolete tree widget, use "browse" mode instead.
-    [x] Let "browse" mode start from current path.
-  - [x] Show only selectable items in "search" mode, if defined.
-  - [ ] Show only selectable and folderish items in browse mode, if selctable items are defined.
-  - [ ] Allow optional image and file upload (especially useful for image and file reference widgets).
-  - [ ] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
-  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
-  - [x] Default ``closeOnSelect`` to ``true``.
-  - [x] Exclude already selected items in result list.
-  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
-  - [x] Show "Open folder" arrow only when in browse mode.
-  - [x] Allow optional image and file upload (especially useful for image and file reference widgets).
-  - [x] Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
-  - [x] Default ``closeOnSelect`` to ``true``.
-  - [x] Exclude already selected items in result list.
-  - [x] Immediately open select2 results when clicking on "Browse" or "Search".
-  - [x] Seperate templates from JavaScript into xml files.
-  [thet]
-
-
-- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
-  [thet]
-
-- add body class for active popover
-  [vangheem]
-
-- Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
-  so you can customize the status message from ajax handlers.
-  [vangheem]
-
-- Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
+  - Make "search" and "browse" mode user-selectable via buttons.
+  - Let search mode search recursively.
+  - Remove obsolete tree widget, use "browse" mode instead.
+  - Let "browse" mode start from current path.
+  - Show only selectable items in "search" mode, if defined.
+  - Show only selectable and folderish items in browse mode, if selctable items are defined.
+  - Allow optional image and file upload (especially useful for image and file reference widgets).
+  - Allow configuration of favorites based on registry path entries and show them as dropdowns to quickly navigate to these locations.
+  - Default ``closeOnSelect`` to ``true``.
+  - Exclude already selected items in result list.
+  - Immediately open select2 results when clicking on "Browse" or "Search".
+  - Show "Open folder" arrow only when in browse mode.
+  - Seperate templates from JavaScript into xml files.
   [thet]
 
 - Structure pattern:
@@ -93,10 +57,37 @@ New:
     Show them transparent but in the same height as if they were not empty.
     Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
   - Fix rearrange button
-
   [thet]
 
+- Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
+  jQuery starts to search at it's first child element.
+  [thet]
+
+- Upload pattern: Add option ``allowPathSelection`` to disable the related items path selection.
+  [thet]
+
+- Be able to set structure status from server with object of { text: '', label: '', type: 'warning'}
+  so you can customize the status message from ajax handlers.
+  [vangheem]
+
+- Add body class for active popover.
+  [vangheem]
+
+- Add ``test-dev-ff`` as Makefile target and the related grunt/karma setup to run tests in Firefox.
+  [thet]
+
+- Update bower.json dependencies except backbone which tests would fail.
+  Keep jQuery at ``1.11.3`` as long as this might be used in Plone 4.x together with plone.app.jquerytools, which uses the deprecated internal ``$.buildFragments`` method.
+  [thet]
+
+- Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
+  [thet]
+
+
 Fixes:
+
+- Fix urls in modals not opening in new window
+  [vangheem]
 
 - Adapt TinyMCE to relateditems changes and remove the selection and result templates.
   [thet]
@@ -106,13 +97,13 @@ Fixes:
   Prevents upload form in structure pattern to be closed when opening the file selection tool.
   [thet]
 
+- Fix positioning of popovers in structure
+  [vangheem]
+
 - Escape input into select2 widget
   [vangheem]
 
 - Fix issue where using filter when paging would not work in the structure pattern
-  [vangheem]
-
-- Fix positioning of popovers in structure
   [vangheem]
 
 - Fix structure to always default to page 1 of results when moving between breadcrumbs
