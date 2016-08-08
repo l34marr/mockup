@@ -9,6 +9,8 @@ Incompatibilities:
 - Remove support for node version < ``0.11`` and update travis dependencies.
   [thet]
 
+- Needs RequireJS configuration for ``mockup-patterns-relateditems-url``.
+
 New:
 
 - Fix urls in modals not opening in new window
@@ -52,6 +54,7 @@ New:
   - [x] Default ``closeOnSelect`` to ``true``.
   - [x] Exclude already selected items in result list.
   - [x] Immediately open select2 results when clicking on "Browse" or "Search".
+  - [x] Seperate templates from JavaScript into xml files.
   [thet]
 
 
