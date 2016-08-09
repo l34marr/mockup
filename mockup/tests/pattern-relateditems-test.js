@@ -362,9 +362,6 @@ define([
       expect($('.path-wrapper .pattern-relateditems-path-label', $container).text()).to.be.equal('Current path:');
       expect($($('.path-wrapper .crumb')[1], $container).text()).to.be.equal('folder1');
 
-      // search NOT restricted to path "folder1"
-      expect($('.pattern-relateditems-result-select').length).to.be.greaterThan(4);
-
     });
 
   });

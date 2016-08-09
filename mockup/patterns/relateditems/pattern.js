@@ -364,6 +364,7 @@ define([
       self.$el.select2('open');
       self.emit('after-browse');
       self.setBreadCrumbs();
+      self.setQuery();
     },
 
     selectItem: function(item) {
