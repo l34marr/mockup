@@ -57,6 +57,7 @@ New:
     Show them transparent but in the same height as if they were not empty.
     Align HTML structue with bootstrap ones and use ``<strong>`` for alert labels.
   - Fix rearrange button
+  - Use thumb scale for image preview in rename dialog and optimize the rename dialog layout.
   [thet]
 
 - Contentloader pattern: Remotely loaded HTML content is wrapped in a ``div`` element, to allow jQuery to find also the first element.
