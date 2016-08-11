@@ -84,6 +84,8 @@ New:
 - Update package.json dependencies, except less which has incompatible changes since 2.0 (less.parse).
   [thet]
 
+- TinyMCE pattern: simplify image scale options to a JSON string.
+
 
 Fixes:
 
