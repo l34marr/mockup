@@ -331,26 +331,26 @@ define([
       // upload
       if (self.options.upload && utils.featureSupport.dragAndDrop() && utils.featureSupport.fileApi()) {
 
-        var UploadView = require('mockup-patterns-relateditems-upload');
-
-        if (self.options.uploadAllowView) {
-          // Check, if uploads are allowed in current context
-          $.ajax({
-            url: self.options.uploadAllowView,
-            // url: self.currentUrl() + self.options.uploadAllowView,  // not working yet
-            dataType: 'JSON',
-            data: {
-              path: self.currentPath
-            },
-            type: 'GET',
-            success: function (result) {
-              initUploadView(UploadView, !result.allowUpload);
-            }
-          });
-        } else {
-          // just initialize upload view without checking, if uploads are allowed.
-          initUploadView(UploadView);
-        }
+        require(['mockup-patterns-relateditems-upload'], function (UploadView) {
+          if (self.options.uploadAllowView) {
+            // Check, if uploads are allowed in current context
+            $.ajax({
+              url: self.options.uploadAllowView,
+              // url: self.currentUrl() + self.options.uploadAllowView,  // not working yet
+              dataType: 'JSON',
+              data: {
+                path: self.currentPath
+              },
+              type: 'GET',
+              success: function (result) {
+                initUploadView(UploadView, !result.allowUpload);
+              }
+            });
+          } else {
+            // just initialize upload view without checking, if uploads are allowed.
+            initUploadView(UploadView);
+          }
+        });
 
       }
 
